@@ -7,28 +7,25 @@
 # 除了第一行的#!/bin/bash不要动，其他的设置，前面带#表示不起作用，不带的表示起作用了（根据你自己需要打开或者关闭）
 #
 
-# 修改openwrt登陆地址,把下面的192.168.123.1修改成你想要的就可以了，其他的不要动
-sed -i 's/192.168.1.1/192.168.123.1/g' package/base-files/files/bin/config_generate
+# 修改主机名字，把XiaomiR3G修改你喜欢的就行（不能使用中文）
+sed -i '/uci commit system/i\uci set system.@system[0].hostname='XiaomiR3G'' package/default-settings/files/zzz-default-settings
 
-# 修改主机名字，把XiaomiR3G修改你喜欢的就行（不能纯数字或者使用中文）
-sed -i 's/OpenWrt/XiaomiR3G/g' ./package/base-files/files/bin/config_generate
+# 内核显示增加自己个性名称（281677160 build $(TZ=UTC-8 date "+%Y.%m.%d") @ 这些为后期增加）
+sed -i "s/OpenWrt /wx611975 build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" package/default-settings/files/zzz-default-settings
 
+# 修改 argon 为默认主题,可根据你喜欢的修改成其他的（不选择那些会自动改变为默认主题的主题才有效果）
+sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
 
-#修改版本内核（下面两行代码前面有#为源码默认最新5.4内核,没#为4.19内核,默认修改X86的，其他机型L大那里target/linux查看，对应修改下面的路径就好）
-sed -i 's/KERNEL_PATCHVER:=5.4/KERNEL_PATCHVER:=4.19/g' ./target/linux/x86/Makefile  #修改内核版本
-sed -i 's/KERNEL_TESTING_PATCHVER:=5.4/KERNEL_TESTING_PATCHVER:=4.19/g' ./target/linux/x86/Makefile  #修改内核版本
+# 修改内核版本
+#sed -i 's/KERNEL_PATCHVER:=4.14/KERNEL_PATCHVER:=4.19/g' target/linux/x86/Makefile
 
-
-
-
-
-# Add a feed source增加默认源地址
-sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
-sed -i '$a src-git helloworld https://github.com/fw876/helloworld' feeds.conf.default
-
-
-
-
+# 修改插件名字（修改名字后不知道会不会对插件功能有影响，自己多测试）
+sed -i 's/"Turbo ACC 网络加速"/"网络加速"/g' package/lean/luci-app-sfe/po/zh-cn/sfe.po
+sed -i 's/TTYD 终端/终端命令/g' feeds/luci/transplant/luci-app-ttyd/po/zh-cn/terminal.po
+sed -i 's/"Web 管理"/"网页管理"/g' package/lean/luci-app-webadmin/po/zh-cn/webadmin.po
+sed -i 's/"管理权"/"密码修改"/g' feeds/luci/modules/luci-base/po/zh-cn/base.po
+sed -i 's/"网络存储"/"存储"/g' package/lean/luci-app-vsftpd/po/zh-cn/vsftpd.po
+sed -i 's/"可道云"/"私有云"/g' package/lienol/luci-app-kodexplorer/po/zh-cn/kodexplorer.po
 
 #添加自定义插件链接（自己想要什么就github里面搜索然后添加）
 git clone -b 18.06 https://github.com/garypang13/luci-theme-edge package/luci-theme-edge  #主题-edge-动态登陆界面
@@ -38,14 +35,18 @@ git clone https://github.com/tty228/luci-app-serverchan package/luci-app-serverc
 git clone -b lede https://github.com/pymumu/luci-app-smartdns.git package/luci-app-smartdns  #smartdns DNS加速
 
 
-#passwall出国软件
-svn co https://github.com/xiaorouji/openwrt-package/trunk/lienol/luci-app-passwall package/luci-app-passwall
-svn co https://github.com/xiaorouji/openwrt-package/trunk/package/brook package/brook
-svn co https://github.com/xiaorouji/openwrt-package/trunk/package/chinadns-ng package/chinadns-ng
-svn co https://github.com/xiaorouji/openwrt-package/trunk/package/tcping package/tcping
-svn co https://github.com/xiaorouji/openwrt-package/trunk/package/trojan-go package/trojan-go
-svn co https://github.com/xiaorouji/openwrt-package/trunk/package/trojan-plus package/trojan-plus
-
+#增加LEDE的ShadowSocksR Plus+出国软件 (源码自带passwall出国软件)
+sed -i '$a src-git helloworld https://github.com/fw876/helloworld' feeds.conf.default
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/shadowsocksr-libev package/diy/shadowsocksr-libev
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/pdnsd-alt package/diy/pdnsd-alt
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/microsocks package/diy/microsocks
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/dns2socks package/diy/dns2socks
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/simple-obfs package/diy/simple-obfs
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/v2ray-plugin package/diy/v2ray-plugin
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/v2ray package/diy/v2ray
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/trojan package/diy/trojan
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/ipt2socks package/diy/ipt2socks
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/redsocks2 package/diy/redsocks2
 
 
 git clone https://github.com/jerrykuku/node-request.git package/node-request  #京东签到依赖
