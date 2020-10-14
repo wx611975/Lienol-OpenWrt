@@ -10,8 +10,6 @@
 # 修改主机名字，把XiaomiR3G修改你喜欢的就行（不能使用中文）
 sed -i '/uci commit system/i\uci set system.@system[0].hostname='XiaomiR3G'' package/default-settings/files/zzz-default-settings
 
-# 内核显示增加自己个性名称（wx611975 build $(TZ=UTC-8 date "+%Y.%m.%d") @ 这些为后期增加）
-sed -i "s/OpenWrt /wx611975 build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" package/default-settings/files/zzz-default-settings
 
 # 修改 argon 为默认主题,可根据你喜欢的修改成其他的（不选择那些会自动改变为默认主题的主题才有效果）
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
