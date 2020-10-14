@@ -24,7 +24,7 @@ sed -i 's/KERNEL_TESTING_PATCHVER:=5.4/KERNEL_TESTING_PATCHVER:=4.19/g' ./target
 
 # Add a feed source增加默认源地址
 sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
-sed -i '$a src-git helloworld https://github.com/fw876/helloworld
+sed -i '$a src-git helloworld https://github.com/fw876/helloworld' feeds.conf.default
 
 
 
